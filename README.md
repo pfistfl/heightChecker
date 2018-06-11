@@ -1,2 +1,2 @@
 # heightchecker
-Repo for the second exercise sheet in the Innolab @ LMU 
+Repo for the git exercise sheet from the course "Programmieren mit statistischer Software (R)"@LMU
