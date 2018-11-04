@@ -19,6 +19,10 @@ students = transform(students, height = as.numeric(as.character(height)))
 students = transform(students, weight = as.numeric(as.character(weight)))
 students$name = c("Maria", "Franz", "Peter", "Lisa", "Hans", "Eva", "Mia", "Karl")
 
+
+
+
+
 # Input: 
 # Argument1, class of argument1 object
 
