@@ -18,29 +18,35 @@ students = transform(students, weight = as.numeric(as.character(weight)))
 
 students$name = c("Maria", "Franz", "Peter", "Lisa", "Hans", "Eva", "Mia", "Karl")
 
-checkHeight3 = function(students.input = students){
+# Input: 
+# Argument1, class of argument1 object
 
-  result.frame = data.frame(matrix(NA, nrow = nrow(students.input), ncol = 2))
-  colnames(result.frame) = c("name", "difference")
+#' calculate sex specific height difference of persons in a data.frame to 
+#' the average height
+#' @param students.input ('data.frame') \cr
+#'   data.frame with columns height, sex and name 
+#' @return ('data.frame') \cr
+#'   returns data.frame with names and difference to average gender height
+checkHeight3 <- function(students.input = students){
+  ## average height by gender
+  women_mean_height = mean(with(students.input, height[sex=="F"]))
+  men_mean_height = mean(with(students.input, height[sex=="M"]))
 
-  male.mean = students.input %>%
-    filter(sex == "M") %>%
-    summarise(mean = mean(height))
-  female.mean = students.input %>%
-    filter(sex == "F") %>%
-    summarise(mean = mean(height))
+  ## initialize vector to store height difference for every person in df
+  height_vector = c() 
 
-  for (i in 1:nrow(students.input)) {
-    # calculate sex-specific deviations from the mean
-    if (students.input[i, "sex"] == "F") {
-      height.diff = 100*(students.input[i,]$height - female.mean$mean)
-    }
-    else {
-      height.diff = 100*(students.input[i, ]$height - male.mean$mean)
-    }
-    result.frame[i, "name"] = as.character(students.input[i, "name"])
-    result.frame[i, "difference"] = height.diff
-  }
+   ## apply function to calculate difference and store the value in height_vector
+  height_vector = apply(students.input, MARGIN = 1, 
+    FUN = function(student){
+    #substract the gender specific means from the individuals to get height differnces
+    (if (student["sex"] == "M") men_mean_height - as.numeric(student["height"]) 
+    else women_mean_height - as.numeric(student["height"]) ) 
+    } ) 
+  
+  ## create return data.frame 
+  result.frame = data.frame("name" = students.input$name, "sexspec_height_diff" = height_vector*100)
+  
+  ## return resulting data.frame
   return(result.frame)
 }
 
