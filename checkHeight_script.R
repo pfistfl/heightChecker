@@ -32,18 +32,26 @@ checkHeight3 = function(students.input = students){
     filter(sex == "F") %>%
     summarise(mean = mean(height))
 
-  for (i in 1:nrow(students.input)) {
-    # calculate sex-specific deviations from the mean
-    if (students.input[i, "sex"] == "F") {
-      height.diff = 100*(students.input[i,]$height - female.mean$mean)
-    }
-    else {
-      height.diff = 100*(students.input[i, ]$height - male.mean$mean)
-    }
-    result.frame[i, "name"] = as.character(students.input[i, "name"])
-    result.frame[i, "difference"] = height.diff
-  }
-  return(result.frame)
-}
+  # goes through the dataframe by feeding each row x into the anonymous function and calculating the result for this row
+  height.diff = apply(
+    students.input,
+    MARGIN = 1,
+    FUN = function(x) {
 
+      if (x[["sex"]] == "F") {
+	100*(as.numeric(x[["height"]]) - female.mean$mean)
+
+      } else {
+	100*(as.numeric(x[["height"]]) - male.mean$mean)
+      }
+    }
+  )
+
+  # merge student names and results of above into a single dataframe as the output
+  data.frame(
+    name       = students.input$name,
+    difference = height.diff
+  )
+}
+  
 checkHeight3(students.input = students)
