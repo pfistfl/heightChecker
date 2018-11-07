@@ -32,6 +32,7 @@ checkHeight3 = function(students.input = students){
     filter(sex == "F") %>%
     summarise(mean = mean(height))
 
+  # goes through the dataframe by feeding each row x into the anonymous function and calculating the result for this row
   height.diff = apply(
     students.input,
     MARGIN = 1,
@@ -46,6 +47,7 @@ checkHeight3 = function(students.input = students){
     }
   )
 
+  # merge student names and results of above into a single dataframe as the output
   data.frame(
     name       = students.input$name,
     difference = height.diff
